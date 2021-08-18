@@ -41,7 +41,7 @@ jobs:
           path: .
       - name: build-step
         run: chmod +x ci/build-app.sh && ci/build-app.sh
-      - name: Upload Repo
+      - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: code
@@ -49,7 +49,6 @@ jobs:
 
   Docker-image:
     runs-on: ubuntu-latest
-    container: docker:latest
     needs: [Test,Build]
     steps:
       - name: Download artifact
