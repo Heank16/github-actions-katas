@@ -13,22 +13,10 @@ jobs:
           name: code
           path: .
 
-  Build:
-    runs-on: ubuntu-latest
-    container: gradle:6-jdk11
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: code
-          path: .
-      - name: build-step
-        run: chmod +x ci/build-app.sh && ci/build-app.sh
-    needs: Clone-down
-
   Test:
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
+    needs: Clone-down
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v2
@@ -37,4 +25,21 @@ jobs:
           path: .
       - name: test-step
         run: chmod +x ci/unit-test-app.sh && ci/unit-test-app.sh
+
+  Build:
+    runs-on: ubuntu-latest
+    container: gradle:6-jdk11
     needs: Clone-down
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: code
+          path: .
+      - name: build-step
+        run: chmod +x ci/build-app.sh && ci/build-app.sh
+      - name: Upload Repo
+        uses: actions/upload-artifact@v2
+        with:
+          name: code
+          path: .
